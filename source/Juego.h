@@ -31,4 +31,8 @@ private:
     Color colorTextoPrincipal = RAYWHITE;
     Color colorTextoSecundario = DARKPURPLE;
     Color colorSuelo = {};
+
+    Sound gritoVoltorb = {};
+    Music musicaTetris = {};
+    bool sonidoReproducido = false;
 };

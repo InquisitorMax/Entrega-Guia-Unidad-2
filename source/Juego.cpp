@@ -5,12 +5,17 @@ const float ESCALA = 30.0f;
 void Juego::Iniciar()
 {
     InitWindow(ANCHO_PANTALLA, ALTO_PANTALLA, "MAVI II - Voltorb");
+    InitAudioDevice();
     SetTargetFPS(60);
 
     colorSuelo = Fade(DARKGREEN, 0.7f);
     texVoltorb = LoadTexture("Assets/voltorb.png");
     texCatapulta = LoadTexture("Assets/catapulta.png");
+    gritoVoltorb = LoadSound("Assets/gritoVoltorb.wav");    
+    musicaTetris = LoadMusicStream("Assets/musicaTetris.mp3");
 
+    PlaySound(gritoVoltorb);   // una sola vez 
+    sonidoReproducido = false;
     CrearParedes();
 
     // los tres rectángulos en el centro de la pantalla
@@ -63,6 +68,15 @@ void Juego::CrearParedes()
 
 void Juego::Actualizar()
 {
+    if (!sonidoReproducido && !IsSoundPlaying(gritoVoltorb))
+    {
+        PlayMusicStream(musicaTetris);
+        sonidoReproducido = true;
+    }
+
+    if (sonidoReproducido)
+        UpdateMusicStream(musicaTetris);
+
     if (IsKeyPressed(KEY_SPACE))
         voltorb.AplicarImpulso();
 
@@ -126,6 +140,9 @@ void Juego::Cerrar()
 {
     UnloadTexture(texVoltorb);
     UnloadTexture(texCatapulta);
+    UnloadSound(gritoVoltorb);
+    UnloadMusicStream(musicaTetris);
+    CloseAudioDevice();
     CloseWindow();
 }
 
